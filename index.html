@@ -223,10 +223,10 @@
             padding: 5px 12px; margin-bottom: 10px;
             box-shadow: 0 2px 12px rgba(233,30,140,0.45);
         }
-        .svc-name { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 400; color: var(--white); line-height: 1.15; margin-bottom: 8px; }
+        .svc-name { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 400; color: var(--white); line-height: 1.15; margin-bottom: 8px; overflow-wrap: break-word; }
         .svc-desc {
             font-size: 0.8rem; font-weight: 300; color: rgba(215,205,205,0.85);
-            line-height: 1.65; margin-bottom: 14px;
+            line-height: 1.65; margin-bottom: 14px; overflow-wrap: break-word;
             max-height: 0; overflow: hidden; transition: max-height 0.45s ease;
         }
         .service-card:hover .svc-desc { max-height: 80px; }
@@ -511,8 +511,11 @@
 
             /* Servicios — 1 columna, formato horizontal */
             .services-grid { grid-template-columns: 1fr; gap: 3px; }
-            .service-card  { aspect-ratio: 16/9; }
-            .svc-desc      { max-height: 80px; } /* visible sin hover en touch */
+            .service-card  { aspect-ratio: 16/9; min-height: 300px; }
+            .svc-desc      { max-height: none; }
+            .service-card .svc-overlay {
+                background: linear-gradient(to top, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.55) 68%, rgba(10,10,10,0.10) 100%);
+            }
 
             /* Galería */
             .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
@@ -541,7 +544,6 @@
             #promociones, #reservaciones, #contacto { padding: 52px 14px; }
             footer { padding: 24px 14px; }
             .hero-scroll { display: none; }
-            .service-card { aspect-ratio: 4/3; }
             .testi-card { padding: 24px; }
             .promo-card { padding: 32px 22px; }
         }
