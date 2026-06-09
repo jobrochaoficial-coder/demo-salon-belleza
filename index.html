@@ -25,7 +25,7 @@
             --border:   rgba(233,30,140,0.25);
         }
 
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
         body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
         ::-webkit-scrollbar { width: 4px; }
@@ -81,6 +81,9 @@
         .d2 { transition-delay: 0.2s; }
         .d3 { transition-delay: 0.3s; }
         .d4 { transition-delay: 0.4s; }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-left, .reveal-right { opacity: 1; transform: none; transition: none; }
+        }
 
         /* ── NAVBAR ── */
         nav {
@@ -968,10 +971,21 @@
     document.querySelectorAll('.m-link').forEach(l => l.addEventListener('click', () => mobileMenu.classList.remove('open')));
 
     // Scroll reveal
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced || !('IntersectionObserver' in window)) {
+        revealEls.forEach(el => el.classList.add('visible'));
+    } else {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+        }, { threshold: 0.1 });
+        revealEls.forEach(el => observer.observe(el));
+    }
+    // Fallback de seguridad: revela todo lo que siga oculto a los 4 segundos
+    setTimeout(() => {
+        document.querySelectorAll('.reveal:not(.visible), .reveal-left:not(.visible), .reveal-right:not(.visible)')
+            .forEach(el => el.classList.add('visible'));
+    }, 4000);
 
     // Min date
     const dateInput = document.getElementById('fecha');
